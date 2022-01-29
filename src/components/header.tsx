@@ -1,37 +1,16 @@
 import React from 'react'
-import { Link } from 'gatsby'
-import styled from '@emotion/styled'
+import { Navbar, Container } from 'react-bootstrap'
 
 type Props = {
   siteTitle: string
 }
 
 const Header = ({ siteTitle }: Props) => (
-  <HeaderWrapper>
-    <HeaderContainer>
-      <StyledHeader>
-        <StyledLink to="/">{siteTitle}</StyledLink>
-      </StyledHeader>
-    </HeaderContainer>
-  </HeaderWrapper>
+  <Navbar bg="primary" variant="dark">
+    <Container>
+    <Navbar.Brand href="/">News</Navbar.Brand>
+    </Container>
+  </Navbar>
 )
 
 export default Header
-
-const HeaderWrapper = styled.div`
-  background: rebeccapurple;
-  margin-bottom: '1.45rem';
-`
-const HeaderContainer = styled.div`
-  margin: 0 auto;
-  max-width: 960px;
-  padding: 1.45rem 1.0875rem;
-`
-const StyledHeader = styled.h1`
-  margin: 0;
-`
-
-const StyledLink = styled(Link)`
-  color: white;
-  text-decoration: none;
-`

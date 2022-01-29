@@ -1,14 +1,47 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import { graphql, StaticQuery } from 'gatsby'
+import { Container } from 'react-bootstrap';
+import Header from '../components/header';
+import NewsCard from '../components/card';
+import { getDescription } from '../components/consts';
 
-import Layout from '../components/layout'
+type Props = {
+  location: any;
+}
 
-const SecondPage = () => (
-  <Layout>
-    <h1>Hi from the second page</h1>
-    <p>Welcome to page 2</p>
-    <Link to="/">Go back to the homepage</Link>
-  </Layout>
-)
+const SecondPage = ({ location }: Props) => {
+  const contentfulId = location.pathname.split('/')[1];
+  return <StaticQuery
+    query={graphql`
+  query getNews {
+    contentfulNews(contentful_id: {eq: "3N9MNmUOWQAS40hTeEIRMn"}) {
+      id
+      thumbnailUrl
+      text {
+        raw
+      }
+      title
+      updatedAt
+    }
+  }
+`}
+    render={(data) => {
+      const { thumbnailUrl, title, text, updatedAt } = data.contentfulNews;
+      console.log(data.contentfulNews)
+      return <>
+        <Header siteTitle={'News'} />
+        <Container fluid className='p-4'>
+          <NewsCard
+            thumbnailUrl={thumbnailUrl}
+            title={title}
+            text={text}
+            updatedAt={updatedAt}
+          />
+        </Container>
+      </>
+    }}
+  />
+
+}
 
 export default SecondPage

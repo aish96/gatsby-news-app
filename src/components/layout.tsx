@@ -1,50 +1,60 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
-import { StaticQuery, graphql } from 'gatsby'
-import styled from '@emotion/styled'
-
+import { Col, Row } from 'react-bootstrap'
+import { StaticQuery, graphql, navigate } from 'gatsby'
 import Header from './header'
 
 import './layout.css'
-
+import { getDescription, getShortDescription, INewsItem } from './consts'
+import NewsCard from './card'
 type Props = {
   children: React.ReactNode
+}
+
+function onClick(id: string): void {
+  navigate(`/${id}`);
 }
 
 const Layout = ({ children }: Props) => (
   <StaticQuery
     query={graphql`
-      query SiteTitleQuery {
-        site {
-          siteMetadata {
-            title
+      query MyQuery {
+        allContentfulNews {
+          edges {
+            node {
+              contentful_id
+              title
+              thumbnailUrl
+              text {
+                raw
+              }
+              updatedAt(fromNow: true)
+            }
           }
         }
       }
     `}
     render={(data) => (
       <>
-        <Helmet
-          title={data.site.siteMetadata.title}
-          meta={[
-            { name: 'description', content: 'Sample' },
-            { name: 'keywords', content: 'sample, something' },
-          ]}
-        >
-          <html lang="en" />
-        </Helmet>
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <Container style={{}}>{children}</Container>
+        <Header siteTitle={'News'} />
+        <Row xs={1} md={2} lg={3} className="g-4 p-4">
+          {data.allContentfulNews.edges.map((node: { node: INewsItem }) => {
+            const { thumbnailUrl, title,contentful_id, updatedAt } = node.node;
+            return (
+              <Col key={contentful_id}>
+                <NewsCard
+                  title={title}
+                  text={node.node.text}
+                  thumbnailUrl={thumbnailUrl}
+                  updatedAt={updatedAt}
+                  onClickHandler={onClick.bind(this, contentful_id)}
+                />
+              </Col>
+            )
+          })}
+        </Row>
       </>
     )}
   />
 )
 
-export default Layout
-
-const Container = styled.div`
-  margin: 0 auto;
-  max-width: 960px;
-  padding: 0px 1.0875rem 1.45rem;
-  padding-top: 0;
-`
+export default Layout;
