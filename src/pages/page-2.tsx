@@ -26,15 +26,14 @@ const SecondPage = ({ location }: Props) => {
   }
 `}
     render={(data) => {
-      const { thumbnailUrl, title, text, updatedAt } = data.contentfulNews;
-      console.log(data.contentfulNews)
+      const { thumbnailUrl, title, updatedAt } = data.contentfulNews;
       return <>
         <Header siteTitle={'News'} />
         <Container fluid className='p-4'>
           <NewsCard
             thumbnailUrl={thumbnailUrl}
             title={title}
-            text={text}
+            text={getDescription(data.contentfulNews)}
             updatedAt={updatedAt}
           />
         </Container>

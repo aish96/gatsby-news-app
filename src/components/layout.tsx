@@ -43,7 +43,7 @@ const Layout = ({ children }: Props) => (
               <Col key={contentful_id}>
                 <NewsCard
                   title={title}
-                  text={node.node.text}
+                  text={getShortDescription(node.node)}
                   thumbnailUrl={thumbnailUrl}
                   updatedAt={updatedAt}
                   onClickHandler={onClick.bind(this, contentful_id)}
